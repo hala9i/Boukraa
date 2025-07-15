@@ -4,174 +4,171 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a0a0a" />
-  <title>إنشاء حساب جديد – BarberApp</title>
+  <title>BarberApp – إنشاء حساب</title>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+  <!-- Firebase (نسخة 8 namespaced) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-  <!-- Fonts -->
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <!-- Styles -->
+  <!-- Style -->
   <style>
     :root {
       --primary: #fdd835;
       --bg-dark: #0a0a0a;
-      --bg-light: rgba(255, 255, 255, 0.1);
       --text-light: #fff;
-      --radius: 18px;
+      --text-muted: #aaa;
     }
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
-    html, body {
+    body, html {
       height: 100%;
       font-family: 'Poppins', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-light);
-      direction: rtl;
     }
 
-    body {
-      background-image: url('assets/barber.jpg');
-      background-size: cover;
-      background-position: center;
+    .background {
       position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
+      height: 100vh;
+      background: url('assets/barber.jpg') center center/cover no-repeat;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
-      padding: 50px 20px;
-      min-height: 100vh;
     }
 
-    .form-box {
-      background-color: var(--bg-light);
-      padding: 30px 20px;
-      border-radius: var(--radius);
+    .overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    .register-box {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
     }
 
-    h2 {
+    .register-box h2 {
       margin-bottom: 20px;
-      text-align: center;
       color: var(--primary);
     }
 
-    label {
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-      display: block;
+    .form-group {
+      margin-bottom: 20px;
+      text-align: right;
     }
 
-    input {
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
       width: 100%;
       padding: 12px;
-      margin-bottom: 18px;
-      border-radius: var(--radius);
-      border: none;
-      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      border: 1px solid #444;
+      background-color: #1e1e1e;
       color: #fff;
       font-size: 1rem;
     }
 
-    input::placeholder {
-      color: #ccc;
-    }
-
-    .btn {
+    .btn-submit {
       width: 100%;
       padding: 14px;
-      background-color: var(--primary);
+      border-radius: 30px;
       border: none;
-      border-radius: var(--radius);
-      font-size: 1.1rem;
-      font-weight: bold;
+      background-color: var(--primary);
       color: #000;
+      font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    .btn:hover {
+    .btn-submit:hover {
       background-color: #fbc02d;
     }
 
     .warning {
-      color: #fdd835;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      text-align: center;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      color: #ffeb3b;
     }
 
-    .footer {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #ccc;
+    .success-message {
+      color: #4caf50;
+      margin-top: 10px;
     }
 
     @media (max-width: 480px) {
-      .form-box {
-        padding: 20px 15px;
+      .register-box {
+        margin: 0 16px;
       }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="form-box">
-      <h2>أنشئ حسابك</h2>
 
-      <div class="warning">
-        ⚠️ تأكد من إدخال رقم هاتفك بدقة، لأنه سيكون وسيلة التواصل!
-      </div>
+<body>
+  <div class="background">
+    <div class="overlay"></div>
+
+    <div class="register-box">
+      <h2>إنشاء حساب جديد</h2>
 
       <form id="registerForm">
-        <label for="name">الاسم الكامل</label>
-        <input type="text" id="name" placeholder="أدخل اسمك" required />
+        <div class="form-group">
+          <label for="name">الاسم الكامل</label>
+          <input type="text" id="name" required placeholder="اكتب اسمك الكامل" />
+        </div>
 
-        <label for="phone">رقم الهاتف</label>
-        <input type="tel" id="phone" placeholder="مثال: 0612345678" required />
+        <div class="form-group">
+          <label for="phone">رقم الهاتف</label>
+          <input type="tel" id="phone" required placeholder="مثال: 0550123456" />
+        </div>
 
-        <label for="lastCut">تاريخ آخر حلاقة</label>
-        <input type="date" id="lastCut" required />
+        <div class="form-group">
+          <label for="lastCut">تاريخ آخر حلاقة</label>
+          <input type="date" id="lastCut" required />
+        </div>
 
-        <label for="password">كلمة المرور</label>
-        <input type="password" id="password" placeholder="••••••••" required />
+        <div class="form-group">
+          <label for="password">كلمة المرور</label>
+          <input type="password" id="password" required placeholder="********" />
+        </div>
 
-        <button type="submit" class="btn">تسجيل وإنشاء الحساب</button>
+        <button type="submit" class="btn-submit">تسجيل وإنشاء الحساب</button>
+
+        <div class="warning">⚠️ تأكد من صحة رقم الهاتف لأنه سيُستخدم في التواصل.</div>
+        <div class="success-message" id="successMsg"></div>
       </form>
-
-      <div class="footer">
-        لديك حساب؟ <a href="login.html" style="color: var(--primary); text-decoration: underline;">سجّل الدخول</a>
-      </div>
     </div>
   </div>
 
   <script>
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyC4lRLZEIaHDfeoigFxvjqQhxbIkU9NUuE",
       authDomain: "hala9i.firebaseapp.com",
@@ -186,16 +183,17 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
+    // التسجيل
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const lastCut = document.getElementById('lastCut').value;
-      const password = document.getElementById('password').value;
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const lastCut = document.getElementById("lastCut").value;
+      const password = document.getElementById("password").value;
 
       if (!/^\d{10}$/.test(phone)) {
-        alert("⚠️ تأكد من كتابة رقم الهاتف بشكل صحيح (10 أرقام).");
+        alert("⚠️ تأكد من كتابة رقم هاتف صحيح مكون من 10 أرقام.");
         return;
       }
 
@@ -203,20 +201,21 @@
 
       auth.createUserWithEmailAndPassword(fakeEmail, password)
         .then(cred => {
-          return db.collection('users').doc(cred.user.uid).set({
+          return db.collection("users").doc(cred.user.uid).set({
             name,
             phone,
             lastHaircut: lastCut,
-            points: 0,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
         })
         .then(() => {
-          alert("✅ تم إنشاء الحساب بنجاح! سيتم تحويلك...");
-          window.location.href = "dashboard.html";
+          document.getElementById("successMsg").textContent = "✅ تم إنشاء الحساب بنجاح!";
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1500);
         })
-        .catch(err => {
-          alert("❌ حدث خطأ: " + err.message);
+        .catch(error => {
+          alert("❌ خطأ: " + error.message);
         });
     });
   </script>
