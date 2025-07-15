@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <!-- ✅ الأساسيات -->
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="تطبيق الحلاقة – احجز موعدك، احصل على إشعارات، وكافئ ولاءك!" />
+  <meta name="keywords" content="barber, haircut, appointment, حلاقة, موعد, PWA" />
+  <meta name="author" content="فريق BarberApp" />
+  <meta name="language" content="ar" />
+  <meta name="robots" content="index, follow" />
+  <meta name="application-name" content="BarberApp" />
+  <meta name="msapplication-TileColor" content="#0a0a0a" />
+
+  <!-- ✅ PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BarberApp" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+
+  <!-- ✅ الوسوم الاجتماعية Open Graph / مشاركة عبر مواقع التواصل -->
+  <meta property="og:title" content="تطبيق الحلاقة – BarberApp" />
+  <meta property="og:description" content="سجّل بسهولة وابدأ حجز مواعيدك!" />
+  <meta property="og:image" content="assets/barber-preview.jpg" />
+  <meta property="og:url" content="https://yourdomain.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BarberApp" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BarberApp – تطبيق الحلاقة الذكي" />
+  <meta name="twitter:description" content="سجل الدخول واحجز موعدك بسهولة!" />
+  <meta name="twitter:image" content="assets/barber-preview.jpg" />
+
+  <!-- ✅ العنوان -->
+  <title>Barber App – تسجيل الدخول</title>
+
+  <!-- ✅ الخطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- ✅ التنسيقات الأساسية -->
+  <style>
+    :root {
+      --primary: #fdd835;
+      --primary-dark: #fbc02d;
+      --bg-dark: #0a0a0a;
+      --bg-card: #111;
+      --text-light: #fff;
+      --text-muted: #aaa;
+      --radius: 25px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      direction: rtl;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+    }
+
+    .image-section {
+      position: relative;
+      width: 100%;
+      height: 65vh;
+      overflow: hidden;
+    }
+
+    .login-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gradient-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 35%;
+      background: linear-gradient(to top, rgba(10,10,10,1), rgba(10,10,10,0));
+      z-index: 1;
+    }
+
+    .overlay-content {
+      position: absolute;
+      bottom: 25px;
+      width: 100%;
+      padding: 0 24px;
+      z-index: 2;
+    }
+
+    .overlay-content .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 14px 18px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .sign-in {
+      background-color: var(--primary);
+      color: #000;
+      border: none;
+    }
+
+    .sign-in:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .sign-up {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .sign-up:hover {
+      background-color: var(--primary);
+      color: #000;
+    }
+
+    .login-content {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .forgot-password a {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .social-login {
+      margin-top: 20px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-icon {
+      width: 45px;
+      height: 45px;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary);
+    }
+
+    .social-icon img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .info-box {
+      margin-top: 30px;
+      background-color: #1f1f1f;
+      padding: 16px;
+      border-radius: 15px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .info-box p {
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .btn {
+        font-size: 0.95rem;
+        padding: 12px;
+      }
+
+      .social-icon {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .login-container {
+        max-width: 440px;
+        margin: auto;
+      }
+    }
+  </style>
+
+  <!-- ✅ تسجيل Service Worker -->
+ <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('service-worker.js')
+        .then(reg => console.log("✅ Service Worker Registered"))
+        .catch(err => console.warn("❌ SW Error", err));
+    });
+  }
+</script>
+
+</head>
+
+
+
+<body>
+  <div class="login-container">
+    <!-- قسم صورة الغلاف مع التدرج -->
+    <div class="image-section">
+      <img src="assets/barber.jpg" alt="صورة الحلاق" class="login-image" />
+      <div class="gradient-overlay"></div>
+      <div class="overlay-content">
+        <div class="buttons">
+          <button class="btn sign-in">تسجيل الدخول</button>
+          <button class="btn sign-up">إنشاء حساب جديد</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- محتوى نموذج الدخول -->
+    <div class="login-content">
+      <!-- رابط نسيان كلمة المرور -->
+      <div class="forgot-password">
+        <a href="#">هل نسيت كلمة المرور؟</a>
+      </div>
+
+      <!-- تسجيل الدخول عبر الشبكات الاجتماعية -->
+      <div class="social-login">
+        <div class="social-icons">
+          <a href="#" class="social-icon fb" title="تسجيل الدخول بواسطة فيسبوك">
+            <img src="assets/icons/facebook.svg" alt="فيسبوك" />
+          </a>
+          <a href="#" class="social-icon google" title="تسجيل الدخول بواسطة جوجل">
+            <img src="assets/icons/google.svg" alt="جوجل" />
+          </a>
+          <a href="#" class="social-icon apple" title="تسجيل الدخول بواسطة آبل">
+            <img src="assets/icons/apple.svg" alt="آبل" />
+          </a>
+        </div>
+      </div>
+
+      <!-- مميزات التطبيق -->
+      <div class="info-box">
+        <p>🔔 تنبيهات فورية بمواعيد الحلاقة القادمة مباشرة على هاتفك.</p>
+        <p>💬 تواصل مع الحلاق لتحديد الوقت المثالي لك.</p>
+        <p>🎁 اكسب نقاط مكافآت مع كل زيارة تؤكدها.</p>
+        <p>📅 عرض تقويم مواعيدك الماضية والقادمة.</p>
+        <p>🔐 تسجيل آمن باستخدام رقم الهاتف أو حسابك في Google.</p>
+        <p>📲 قم بتثبيت التطبيق كتطبيق هاتف ذكي بخطوة واحدة.</p>
+        <p>⭐ قيّم الخدمة بعد كل حلاقة وساعدنا في التحسين.</p>
+      </div>
+
+      <!-- نموذج تسجيل الدخول -->
+      <form class="form-sample" onsubmit="event.preventDefault()">
+        <div class="form-group">
+          <label for="full-name">الاسم الكامل</label>
+          <input type="text" id="full-name" placeholder="اكتب اسمك هنا" required />
+        </div>
+
+        <div class="form-group">
+          <label for="last-cut">تاريخ آخر حلاقة</label>
+          <input type="date" id="last-cut" required />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn sign-in">دخول الآن</button>
+        </div>
+      </form>
+
+      <!-- إشعار توضيحي أسفل النموذج -->
+      <div class="notice">
+        <p>📣 سيتم إشعارك تلقائيًا عند اقتراب موعد الحلاقة التالية.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- تنسيقات إضافية للنموذج والمحتوى -->
+  <style>
+    .form-sample {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group label {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: block;
+      color: #ddd;
+    }
+
+    .form-group input {
+      padding: 12px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid #444;
+      background-color: #1c1c1c;
+      color: #fff;
+    }
+
+    .notice {
+      margin-top: 24px;
+      font-size: 0.9rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+  </style>
+
+  <!-- سكربت التنقل بين الصفحات -->
+  <script>
+    document.querySelector(".sign-in").addEventListener("click", () => {
+      window.location.href = "login.html";
+    });
+
+    document.querySelector(".sign-up").addEventListener("click", () => {
+      window.location.href = "register.html";
+    });
+
+    document.querySelector(".google").addEventListener("click", (e) => {
+      e.preventDefault();
+      alert("🚧 ميزة تسجيل الدخول باستخدام Google قيد التطوير.");
+    });
+  </script>
+    <script src="main.js"></script>
+</body>
+</html>
