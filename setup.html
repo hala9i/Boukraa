@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Firebase Data – BarberApp</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background-color: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      color: #fdd835;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #ccc;
+      line-height: 1.8;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #fdd835;
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #fbc02d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔧 إعداد قاعدة البيانات</h1>
+    <p>اضغط على الزر أدناه لإنشاء البيانات الافتراضية في Firestore (مستخدم، موعد، نصائح، صور وفيديوهات).</p>
+    <button onclick="createInitialData()">إنشاء البيانات</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4lRLZEIaHDfeoigFxvjqQhxbIkU9NUuE",
+      authDomain: "hala9i.firebaseapp.com",
+      projectId: "hala9i",
+      storageBucket: "hala9i.appspot.com",
+      messagingSenderId: "1068748204618",
+      appId: "1:1068748204618:web:238df060c97d48a735d4b3",
+      measurementId: "G-2Y45YBERGG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.createInitialData = async function () {
+      try {
+        // ✅ 1. مستخدم
+        await setDoc(doc(db, "users", "demoUser"), {
+          fullName: "يوسف بن سليمان",
+          phone: "+213556123456",
+          email: "demo@hala9i.com",
+          lastCut: "2025-06-10",
+          points: 45
+        });
+
+        // ✅ 2. موعد
+        await setDoc(doc(db, "appointments", "demoUser"), {
+          nextDate: "2025-07-20T16:00:00"
+        });
+
+        // ✅ 3. نصائح
+        const tips = [
+          "💧 اغسل شعرك بالماء الفاتر وليس الساخن.",
+          "🧴 استخدم شامبو خالٍ من الكبريتات.",
+          "✂️ قص أطراف الشعر كل 3-4 أسابيع.",
+          "🛏️ نم وشعرك نظيف وممشط.",
+          "☀️ احمِ شعرك من الشمس بقبعة أو منتج حماية."
+        ];
+        for (const text of tips) {
+          await addDoc(collection(db, "tips"), { text });
+        }
+
+        // ✅ 4. صور وفيديوهات
+        const mediaItems = [
+          { type: "image", url: "https://res.cloudinary.com/demo/image/upload/v1699999999/tip1.jpg" },
+          { type: "image", url: "https://res.cloudinary.com/demo/image/upload/v1699999999/tip2.jpg" },
+          { type: "video", url: "https://res.cloudinary.com/demo/video/upload/v1699999999/video1.mp4" },
+          { type: "video", url: "https://res.cloudinary.com/demo/video/upload/v1699999999/video2.mp4" }
+        ];
+        for (const media of mediaItems) {
+          await addDoc(collection(db, "media"), media);
+        }
+
+        alert("✅ تم إنشاء القاعدة وملؤها بالبيانات بنجاح.");
+      } catch (error) {
+        console.error("❌ فشل في إنشاء البيانات:", error);
+        alert("❌ حدث خطأ أثناء الإعداد:\n" + error.message);
+      }
+    };
+  </script>
+
+</body>
+</html>
